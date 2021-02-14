@@ -1,0 +1,53 @@
+package analizadores;
+import java_cup.runtime.*;
+import proyecto.*;
+
+parser code
+{:  
+    //-----------------------------------------para errores sintacticos-------------------------------------------------------------------------------------------
+    public void syntax_error(Symbol s)
+    {
+        System.err.println("Error en la Línea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "+s.value + " no reconocido. Se ha recuperado del error." );
+    }
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+        System.err.println("Error en la Línea " + (s.right+1)+ " Columna "+(s.left+1)+". Identificador " +s.value + " no reconocido.");
+    }
+    //-------------------------------------------------------------------------------------------------------------------------------------------8
+:}
+
+action code {:
+:}
+
+// terminal [Tipo] listaterminales;
+terminal String nombre, suma, resta, mult, div, entero, decimal;
+
+// no terminal [Tipo] listanoterminales;
+non terminal Double INICIO, EXPRESION;
+
+precedence left suma, resta;
+precedence left mult, div;
+
+start with INICIO;
+
+INICIO::= EXPRESION:valor {:System.out.println(valor);
+    proyecto.Interfaz.list_of_names+=valor;
+:};
+                //2        +       5
+EXPRESION ::= EXPRESION:a suma EXPRESION:b {:RESULT=a+b;:} // EXPRESION ::= EXPRESION signcon EXPRESION EXPRESION
+            | EXPRESION:a resta EXPRESION:b {:RESULT=a-b;:}
+            | EXPRESION:a mult EXPRESION:b {:RESULT=a*b;
+                //addNodo("mult",a,b)
+            :} // mult EXPRESION:a EXPRESION:b
+            | EXPRESION:a div EXPRESION:b {:RESULT=a/b;:}
+            | entero:val {:RESULT=new Double(val);:}
+            | decimal:val {:RESULT=new Double(val);:}
+            // | asteris EXPRESION
+            // | mas EXPRESION
+            // | punto EXPRESION EXPRESION <=> EXPRESION punto EXPRESION
+            ;
+//2+2*2.5+10*2
+
+
+/*LID::= LID comaa nombre:name {:App.Aplicacion.list_of_names+=name+"\n";:}
+    | nombre:name {:App.Aplicacion.list_of_names+=name+"\n";:};*/
