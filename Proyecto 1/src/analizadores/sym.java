@@ -8,25 +8,53 @@ package analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int div = 6;
-  public static final int resta = 4;
-  public static final int suma = 3;
-  public static final int mult = 5;
-  public static final int decimal = 8;
+  public static final int cadena = 9;
+  public static final int decimal = 7;
+  public static final int llaveiz = 16;
+  public static final int flecha = 12;
+  public static final int mult = 4;
+  public static final int inter = 21;
+  public static final int sconj = 18;
+  public static final int porcentaje = 14;
+  public static final int conj = 10;
+  public static final int or = 20;
+  public static final int resta = 3;
+  public static final int conc = 19;
+  public static final int div = 5;
   public static final int EOF = 0;
-  public static final int entero = 7;
+  public static final int simbolo = 22;
+  public static final int id = 8;
+  public static final int puntocoma = 13;
   public static final int error = 1;
-  public static final int nombre = 2;
+  public static final int entero = 6;
+  public static final int tld = 11;
+  public static final int suma = 2;
+  public static final int dpuntos = 15;
+  public static final int llaveder = 17;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "nombre",
   "suma",
   "resta",
   "mult",
   "div",
   "entero",
-  "decimal"
+  "decimal",
+  "id",
+  "cadena",
+  "conj",
+  "tld",
+  "flecha",
+  "puntocoma",
+  "porcentaje",
+  "dpuntos",
+  "llaveiz",
+  "llaveder",
+  "sconj",
+  "conc",
+  "or",
+  "inter",
+  "simbolo"
   };
 }
 

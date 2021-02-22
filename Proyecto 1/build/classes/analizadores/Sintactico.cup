@@ -7,11 +7,11 @@ parser code
     //-----------------------------------------para errores sintacticos-------------------------------------------------------------------------------------------
     public void syntax_error(Symbol s)
     {
-        System.err.println("Error en la Línea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "+s.value + " no reconocido. Se ha recuperado del error." );
+        System.err.println("Error Sintactico en la Línea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "+s.value + " no reconocido. Se ha recuperado del error." );
     }
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
     {
-        System.err.println("Error en la Línea " + (s.right+1)+ " Columna "+(s.left+1)+". Identificador " +s.value + " no reconocido.");
+        System.err.println("Error Sintactico en la Línea " + (s.right+1)+ " Columna "+(s.left+1)+". Identificador " +s.value + " no reconocido.");
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------8
 :}
@@ -20,7 +20,7 @@ action code {:
 :}
 
 // terminal [Tipo] listaterminales;
-terminal String nombre, suma, resta, mult, div, entero, decimal;
+terminal String suma, resta, mult, div, entero, decimal, id, cadena, conj, tld, flecha, puntocoma, porcentaje, dpuntos, llaveiz, llaveder, sconj, conc, or, inter, simbolo;
 
 // no terminal [Tipo] listanoterminales;
 non terminal Double INICIO, EXPRESION;

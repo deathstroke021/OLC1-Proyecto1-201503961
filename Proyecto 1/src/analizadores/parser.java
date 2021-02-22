@@ -42,18 +42,18 @@ public class parser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\016\000\006\011\005\012\004\001\002\000\014\002" +
-    "\ufffa\005\ufffa\006\ufffa\007\ufffa\010\ufffa\001\002\000\014" +
-    "\002\ufffb\005\ufffb\006\ufffb\007\ufffb\010\ufffb\001\002\000" +
-    "\014\002\000\005\012\006\011\007\013\010\014\001\002" +
+    "\000\016\000\006\010\005\011\004\001\002\000\014\002" +
+    "\ufffa\004\ufffa\005\ufffa\006\ufffa\007\ufffa\001\002\000\014" +
+    "\002\ufffb\004\ufffb\005\ufffb\006\ufffb\007\ufffb\001\002\000" +
+    "\014\002\000\004\012\005\011\006\013\007\014\001\002" +
     "\000\004\002\010\001\002\000\004\002\001\001\002\000" +
-    "\006\011\005\012\004\001\002\000\006\011\005\012\004" +
-    "\001\002\000\006\011\005\012\004\001\002\000\006\011" +
-    "\005\012\004\001\002\000\014\002\ufffc\005\ufffc\006\ufffc" +
-    "\007\ufffc\010\ufffc\001\002\000\014\002\ufffd\005\ufffd\006" +
-    "\ufffd\007\ufffd\010\ufffd\001\002\000\014\002\uffff\005\uffff" +
-    "\006\uffff\007\013\010\014\001\002\000\014\002\ufffe\005" +
-    "\ufffe\006\ufffe\007\013\010\014\001\002" });
+    "\006\010\005\011\004\001\002\000\006\010\005\011\004" +
+    "\001\002\000\006\010\005\011\004\001\002\000\006\010" +
+    "\005\011\004\001\002\000\014\002\ufffc\004\ufffc\005\ufffc" +
+    "\006\ufffc\007\ufffc\001\002\000\014\002\ufffd\004\ufffd\005" +
+    "\ufffd\006\ufffd\007\ufffd\001\002\000\014\002\uffff\004\uffff" +
+    "\005\uffff\006\013\007\014\001\002\000\014\002\ufffe\004" +
+    "\ufffe\005\ufffe\006\013\007\014\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -108,11 +108,11 @@ public class parser extends java_cup.runtime.lr_parser {
     //-----------------------------------------para errores sintacticos-------------------------------------------------------------------------------------------
     public void syntax_error(Symbol s)
     {
-        System.err.println("Error en la Línea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "+s.value + " no reconocido. Se ha recuperado del error." );
+        System.err.println("Error Sintactico en la Línea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "+s.value + " no reconocido. Se ha recuperado del error." );
     }
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
     {
-        System.err.println("Error en la Línea " + (s.right+1)+ " Columna "+(s.left+1)+". Identificador " +s.value + " no reconocido.");
+        System.err.println("Error Sintactico en la Línea " + (s.right+1)+ " Columna "+(s.left+1)+". Identificador " +s.value + " no reconocido.");
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------8
 
