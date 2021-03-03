@@ -20,34 +20,87 @@ action code {:
 :}
 
 // terminal [Tipo] listaterminales;
-terminal String suma, resta, mult, div, entero, decimal, id, cadena, conj, tld, flecha, puntocoma, porcentaje, dpuntos, llaveiz, llaveder, sconj, conc, or, inter, simbolo;
+terminal String suma, resta, mult, div, entero, decimal, letra, id, cadena, conj, tld, flecha, coma, puntocoma, porcentaje, dpuntos, llaveiz, llaveder, sconj, conc, or, inter, simbolo, comilla, comilla2, salto;
 
 // no terminal [Tipo] listanoterminales;
-non terminal Double INICIO, EXPRESION;
+non terminal String INICIO, EXPRESION, BLOQUE1, DEFCONJ, DEFEXPR, NOTACION, NOTACION2, BLOQUE2, BLOQUE3, DEFCADENA;
 
-precedence left suma, resta;
-precedence left mult, div;
+precedence left or;
+precedence left conc;
+precedence left suma, mult, inter;
 
 start with INICIO;
 
-INICIO::= EXPRESION:valor {:System.out.println(valor);
-    proyecto.Interfaz.list_of_names+=valor;
+INICIO::= llaveiz BLOQUE1 BLOQUE2 BLOQUE3 llaveder;
+
+BLOQUE1::= DEFCONJ DEFEXPR;
+
+DEFCONJ::= DEFCONJ conj dpuntos id flecha NOTACION puntocoma 
+        |conj dpuntos id flecha NOTACION puntocoma;
+
+NOTACION::= letra sconj letra
+        |entero sconj entero
+        |simbolo sconj simbolo
+        |letra sconj entero
+        |letra sconj simbolo
+        |entero sconj letra
+        |entero sconj simbolo
+        |simbolo sconj entero
+        |simbolo sconj letra
+        |letra NOTACION2
+        |entero NOTACION2
+        |simbolo NOTACION2;
+
+NOTACION2::= NOTACION2 coma letra
+        | NOTACION2 coma entero
+        | NOTACION2 coma simbolo
+        | coma letra
+        | coma entero
+        | coma simbolo;
+
+DEFEXPR::= DEFEXPR id flecha EXPRESION:valor {: System.out.println("Valor " + valor); //proyecto.Interfaz.list_of_names+=valor;:} puntocoma
+           |id flecha EXPRESION:valor {: System.out.println("Valor " + valor); //proyecto.Interfaz.list_of_names+=valor;:} puntocoma;
+
+EXPRESION ::= suma EXPRESION:a {:RESULT=a; System.out.println("Una o más veces " + a);:} // EXPRESION ::= EXPRESION signcon EXPRESION EXPRESION
+            | mult EXPRESION:a {:RESULT=a; System.out.println("Cero o más veces " + a);:}
+            | conc EXPRESION:a EXPRESION:b {:RESULT= a + b;System.out.println("Concatenacion " + a + b);:} 
+            | or EXPRESION:a EXPRESION:b {:RESULT=a + b; System.out.println("Or " + a + b);:} 
+            | inter EXPRESION:a {:RESULT=a; System.out.println("Cero o una vez " + a );:}  
+            | llaveiz id:val {:RESULT=val;:} llaveder
+            | cadena:val {:RESULT=val;:}
+            | comilla:val {:RESULT=val;:}
+            | comilla2:val {:RESULT=val;:}
+            | salto:val {:RESULT=val;:}; 
+
+BLOQUE2::= BLOQUE2 porcentaje porcentaje
+        | porcentaje;
+
+BLOQUE3::= DEFCADENA;
+
+DEFCADENA::= DEFCADENA id dpuntos cadena puntocoma
+        |id dpuntos cadena puntocoma;
+
+/*LID::= LID comaa nombre:name {:App.Aplicacion.list_of_names+=name+"\n";:}
+    | nombre:name {:App.Aplicacion.list_of_names+=name+"\n";:};*/
+
+/*
+INICIO::= EXPRESION:valor {:
+    System.out.println(valor);
+    //proyecto.Interfaz.list_of_names+=valor;
 :};
-                //2        +       5
-EXPRESION ::= EXPRESION:a suma EXPRESION:b {:RESULT=a+b;:} // EXPRESION ::= EXPRESION signcon EXPRESION EXPRESION
-            | EXPRESION:a resta EXPRESION:b {:RESULT=a-b;:}
-            | EXPRESION:a mult EXPRESION:b {:RESULT=a*b;
+
+
+
+EXPRESION ::= suma EXPRESION:a EXPRESION:b {:RESULT=a+b;:} // EXPRESION ::= EXPRESION signcon EXPRESION EXPRESION
+            | resta EXPRESION:b EXPRESION:a  {:RESULT=a-b;:}
+            | mult EXPRESION:a EXPRESION:b {:RESULT=a*b;
                 //addNodo("mult",a,b)
             :} // mult EXPRESION:a EXPRESION:b
-            | EXPRESION:a div EXPRESION:b {:RESULT=a/b;:}
+            | div EXPRESION:b EXPRESION:a {:RESULT=a/b;:}
             | entero:val {:RESULT=new Double(val);:}
             | decimal:val {:RESULT=new Double(val);:}
             // | asteris EXPRESION
             // | mas EXPRESION
             // | punto EXPRESION EXPRESION <=> EXPRESION punto EXPRESION
             ;
-//2+2*2.5+10*2
-
-
-/*LID::= LID comaa nombre:name {:App.Aplicacion.list_of_names+=name+"\n";:}
-    | nombre:name {:App.Aplicacion.list_of_names+=name+"\n";:};*/
+//2+2*2.5+10*2*/

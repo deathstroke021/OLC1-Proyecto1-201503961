@@ -33,6 +33,7 @@ import java_cup.runtime.*;
 */
 
 blancos = [ \t\r\n]+
+espacios = [ \t\r]+
 
 //letras
 letra = [a-zA-Z]
@@ -40,6 +41,10 @@ entero = [0-9]+  //0,1,2,3,4,5,6,7,8,9 -> 1111, 125
 decimal = [0-9]+ "." [0-9]+
 id ={letra}({letra}|"_"|[0-9])*
 simbolo = [!-}]
+cadena1 = "\"" ({letra}|{entero}|{simbolo}|{espacios})* "\""
+cadena2 = "\”" ({letra}|{entero}|{simbolo}|{espacios})* "\”"
+cadena3 = "\'" ({letra}|{entero}|{simbolo}|{espacios})* "\'"
+cadena = {cadena1}|{cadena2}|{cadena3}
 //suma = "+"
 
 //Identificadores
@@ -51,10 +56,10 @@ simbolo = [!-}]
 
 %%
 
-<STRNG>{
+/*<STRNG>{
     [\"] {  String temporal=cadena; cadena=""; yybegin(YYINITIAL);
         System.out.println("\"" + temporal + "\"" );
-        return new Symbol(sym.cadena, yycolumn,yyline,temporal);   }
+        return new Symbol(sym.cadena, yycolumn,yyline, temporal);   }
     [^\"] { cadena+=yytext(); }
 }
 
@@ -70,7 +75,7 @@ simbolo = [!-}]
         System.out.println("\'" + temporal + "\'" );
         return new Symbol(sym.cadena, yycolumn,yyline,temporal);   }
     [^\'] { cadena+=yytext(); }
-}
+}*/
 
 <YYINITIAL> "<!"                {yybegin(COMENT_MULTI);}     // Si la entrada es un comentario inicia aqui
 <COMENT_MULTI> "!>"             {yybegin(YYINITIAL);}        // Si se acaba el comentario vuelve a YYINITIAL
@@ -91,6 +96,7 @@ simbolo = [!-}]
 "*" {System.out.println(yytext());return new Symbol(sym.mult,yycolumn,yyline,yytext());}
 "/" {System.out.println(yytext());return new Symbol(sym.div,yycolumn,yyline,yytext());}
 "->" {System.out.println(yytext());return new Symbol(sym.flecha,yycolumn,yyline,yytext());}
+"," {System.out.println(yytext());return new Symbol(sym.coma,yycolumn,yyline,yytext());}
 ";" {System.out.println(yytext());return new Symbol(sym.puntocoma,yycolumn,yyline,yytext());}
 "%" {System.out.println(yytext());return new Symbol(sym.porcentaje,yycolumn,yyline,yytext());}
 ":" {System.out.println(yytext());return new Symbol(sym.dpuntos,yycolumn,yyline,yytext());}
@@ -100,6 +106,9 @@ simbolo = [!-}]
 "." {System.out.println(yytext());return new Symbol(sym.conc,yycolumn,yyline,yytext());}
 "|" {System.out.println(yytext());return new Symbol(sym.or,yycolumn,yyline,yytext());}
 "?" {System.out.println(yytext());return new Symbol(sym.inter,yycolumn,yyline,yytext());}
+"\\”" {System.out.println(yytext());return new Symbol(sym.comilla,yycolumn,yyline,yytext());}
+"\\'" {System.out.println(yytext());return new Symbol(sym.comilla2,yycolumn,yyline,yytext());}
+"\\n" {System.out.println(yytext());return new Symbol(sym.salto,yycolumn,yyline,yytext());}
 "conj" {System.out.println(yytext());return new Symbol(sym.conj,yycolumn,yyline,yytext());}
 "tld" {System.out.println(yytext());return new Symbol(sym.tld,yycolumn,yyline,yytext());}
 
@@ -109,8 +118,10 @@ simbolo = [!-}]
 //{nombre} {System.out.println(yytext());return new Symbol(sym.nombre,yycolumn,yyline,yytext());}
 {entero} {System.out.println(yytext());return new Symbol(sym.entero,yycolumn,yyline,yytext());} // almacenando un valor entero en la tabla de simbolos
 {decimal} {System.out.println(yytext());return new Symbol(sym.decimal,yycolumn,yyline,yytext());}
+{letra} {System.out.println(yytext());return new Symbol(sym.letra,yycolumn,yyline,yytext());}
 {id} {System.out.println(yytext());return new Symbol(sym.id,yycolumn,yyline,yytext());}
 {simbolo} {System.out.println(yytext());return new Symbol(sym.simbolo,yycolumn,yyline,yytext());}
+{cadena} {System.out.println(yytext());return new Symbol(sym.cadena,yycolumn,yyline,yytext());}
 "\"" {yybegin(STRNG);}
 "\”" {yybegin(STRNG2);}
 "\'" {yybegin(STRNG3);}

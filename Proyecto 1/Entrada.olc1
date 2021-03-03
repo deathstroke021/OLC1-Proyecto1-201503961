@@ -1,0 +1,25 @@
+{
+
+conj : numeros -> 1~9;
+
+conj: letras -> a~z;
+
+conj: simbolos -> !~#; // Simbolos usados en el sistema
+
+conj: varios -> a,1,!;
+
+Exp1 -> + {digitos};
+
+Exp2 -> * {letras};
+
+%%
+%%%
+
+Exp1 : "prueba";
+
+Exp2 : 'Auraofpsych';
+
+Exp3 : ”Fernando-22 #Doomsday ”;
+
+}
+

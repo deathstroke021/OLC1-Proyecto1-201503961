@@ -301,7 +301,7 @@ public class Interfaz extends javax.swing.JFrame {
             analizadores.parser sintactico;
             sintactico = new analizadores.parser(new analizadores.Lexico(new StringReader(path)));
             sintactico.parse();
-            jTextArea3.setText(list_of_names);
+            //jTextArea3.setText(list_of_names);
         } catch (Exception e) {
         }
     }//GEN-LAST:event_jButton2ActionPerformed

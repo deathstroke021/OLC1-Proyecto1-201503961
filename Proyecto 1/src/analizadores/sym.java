@@ -8,29 +8,34 @@ package analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int cadena = 9;
+  public static final int comilla = 25;
+  public static final int cadena = 10;
   public static final int decimal = 7;
-  public static final int llaveiz = 16;
-  public static final int flecha = 12;
+  public static final int llaveiz = 18;
+  public static final int coma = 14;
+  public static final int flecha = 13;
   public static final int mult = 4;
-  public static final int inter = 21;
-  public static final int sconj = 18;
-  public static final int porcentaje = 14;
-  public static final int conj = 10;
-  public static final int or = 20;
+  public static final int salto = 27;
+  public static final int inter = 23;
+  public static final int sconj = 20;
+  public static final int porcentaje = 16;
+  public static final int conj = 11;
+  public static final int or = 22;
   public static final int resta = 3;
-  public static final int conc = 19;
+  public static final int conc = 21;
   public static final int div = 5;
   public static final int EOF = 0;
-  public static final int simbolo = 22;
-  public static final int id = 8;
-  public static final int puntocoma = 13;
+  public static final int letra = 8;
+  public static final int simbolo = 24;
+  public static final int id = 9;
+  public static final int puntocoma = 15;
+  public static final int comilla2 = 26;
   public static final int error = 1;
   public static final int entero = 6;
-  public static final int tld = 11;
+  public static final int tld = 12;
+  public static final int dpuntos = 17;
   public static final int suma = 2;
-  public static final int dpuntos = 15;
-  public static final int llaveder = 17;
+  public static final int llaveder = 19;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -40,11 +45,13 @@ public class sym {
   "div",
   "entero",
   "decimal",
+  "letra",
   "id",
   "cadena",
   "conj",
   "tld",
   "flecha",
+  "coma",
   "puntocoma",
   "porcentaje",
   "dpuntos",
@@ -54,7 +61,10 @@ public class sym {
   "conc",
   "or",
   "inter",
-  "simbolo"
+  "simbolo",
+  "comilla",
+  "comilla2",
+  "salto"
   };
 }
 
