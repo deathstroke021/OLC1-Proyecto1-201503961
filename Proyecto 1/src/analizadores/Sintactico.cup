@@ -1,9 +1,80 @@
 package analizadores;
 import java_cup.runtime.*;
 import proyecto.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 parser code
 {:  
+
+    public static int contId=2;
+    public static int contI=0;
+    public static int contarbol = 1;
+    public static String primeros = ""; 
+    public static Nodo Raiz;
+    public static void graficarArbol(Nodo act, String nombre){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot");
+            pw = new PrintWriter(fichero);
+            pw.println("digraph G{");
+            pw.println("rankdir=UD");
+            pw.println("concentrate=true");
+            pw.println("node[shape=record]");
+            pw.println("struct0[ label =\" {N|{" + primeros + "|.|" + (contI + 1) + "}|} \"];");
+            pw.println("struct1[ label =\" {N|{" + (contI + 1) + "|#|" + (contI + 1) + "} |" + (contI + 1) + "} \"];");
+            pw.println(act.getCodigoInterno());
+            pw.println("struct0->struct" + (contId - 1));
+            pw.println("struct0->struct1");
+            pw.println("}");
+            System.out.println("Archivo generado correctamente");
+        } catch (Exception e) {
+            System.out.println("error, no se realizo el archivo");
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        //para compilar el archivo dot y obtener la imagen
+        try {
+            //dirección doonde se ecnuentra el compilador de graphviz
+            String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
+            //dirección del archivo dot
+            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot";
+            //dirección donde se creara la magen
+            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\" +nombre+ ".jpg";
+            //tipo de conversón
+            String tParam = "-Tjpg";
+            String tOParam = "-o";
+
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+
+            Runtime rt = Runtime.getRuntime();
+
+            rt.exec(cmd);
+
+            contId=2;
+            contI=0;
+            primeros = "";
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+        }
+    }
+     
+
     //-----------------------------------------para errores sintacticos-------------------------------------------------------------------------------------------
     public void syntax_error(Symbol s)
     {
@@ -23,7 +94,7 @@ action code {:
 terminal String suma, resta, mult, div, entero, decimal, letra, id, cadena, conj, tld, flecha, coma, puntocoma, porcentaje, dpuntos, llaveiz, llaveder, sconj, conc, or, inter, simbolo, comilla, comilla2, salto;
 
 // no terminal [Tipo] listanoterminales;
-non terminal String INICIO, EXPRESION, BLOQUE1, DEFCONJ, DEFEXPR, NOTACION, NOTACION2, BLOQUE2, BLOQUE3, DEFCADENA;
+non terminal Nodo INICIO, EXPRESION, BLOQUE1, DEFCONJ, DEFEXPR, NOTACION, NOTACION2, BLOQUE2, BLOQUE3, DEFCADENA;
 
 precedence left or;
 precedence left conc;
@@ -58,19 +129,124 @@ NOTACION2::= NOTACION2 coma letra
         | coma entero
         | coma simbolo;
 
-DEFEXPR::= DEFEXPR id flecha EXPRESION:valor {: System.out.println("Valor " + valor); //proyecto.Interfaz.list_of_names+=valor;:} puntocoma
-           |id flecha EXPRESION:valor {: System.out.println("Valor " + valor); //proyecto.Interfaz.list_of_names+=valor;:} puntocoma;
+DEFEXPR::= DEFEXPR id flecha EXPRESION:valor {: //System.out.println("Valor " + valor.getValor());
+            parser.Raiz = valor;
+            graficarArbol(valor,"arbol" + Integer.toString(parser.contarbol));
+            parser.contarbol++;
+            //proyecto.Interfaz.list_of_names+=valor;
+            :} puntocoma
+           |id flecha EXPRESION:valor {: //System.out.println("Valor " + valor.getValor());
+            parser.Raiz = valor;
+            graficarArbol(valor,"arbol" + Integer.toString(parser.contarbol));
+            parser.contarbol++;
+            //proyecto.Interfaz.list_of_names+=valor;
+            :} puntocoma;
 
-EXPRESION ::= suma EXPRESION:a {:RESULT=a; System.out.println("Una o más veces " + a);:} // EXPRESION ::= EXPRESION signcon EXPRESION EXPRESION
-            | mult EXPRESION:a {:RESULT=a; System.out.println("Cero o más veces " + a);:}
-            | conc EXPRESION:a EXPRESION:b {:RESULT= a + b;System.out.println("Concatenacion " + a + b);:} 
-            | or EXPRESION:a EXPRESION:b {:RESULT=a + b; System.out.println("Or " + a + b);:} 
-            | inter EXPRESION:a {:RESULT=a; System.out.println("Cero o una vez " + a );:}  
-            | llaveiz id:val {:RESULT=val;:} llaveder
-            | cadena:val {:RESULT=val;:}
-            | comilla:val {:RESULT=val;:}
-            | comilla2:val {:RESULT=val;:}
-            | salto:val {:RESULT=val;:}; 
+EXPRESION ::= suma EXPRESION:a {://RESULT=a; 
+            //System.out.println("Una o más veces " + a.getValor());
+            Nodo nuevaSuma = new Nodo(null, a, "+", parser.contId, " ", "N" , " " , " ");
+            parser.contId++;
+            RESULT = nuevaSuma;
+            nuevaSuma.setFirst(nuevaSuma.getHder().getFirst());
+            nuevaSuma.setLast(nuevaSuma.getHder().getLast());
+            primeros = nuevaSuma.getHder().getFirst();
+            :} // EXPRESION ::= EXPRESION signcon EXPRESION EXPRESION
+
+            | mult EXPRESION:a {://RESULT=a; 
+            //System.out.println("Cero o más veces " + a.getValor());
+            Nodo nuevaMult = new Nodo(null, a, "*", parser.contId, " ", " ", " ", " ");
+            parser.contId++;
+            RESULT = nuevaMult;
+            if(nuevaMult.getHder().getAN() == "AN"){
+            nuevaMult.setAN("AN");
+            }else{
+            nuevaMult.setAN("N");
+            }
+            nuevaMult.setFirst(nuevaMult.getHder().getFirst());
+            nuevaMult.setLast(nuevaMult.getHder().getLast());
+            primeros = nuevaMult.getHder().getFirst();
+            :}
+
+            | conc EXPRESION:a EXPRESION:b {://RESULT= a + b;
+            //System.out.println("Concatenacion " + a.getValor() + b.getValor());
+            Nodo nuevaConc = new Nodo(a, b, ".", parser.contId, " ", " ", " ", " ");
+            parser.contId++;
+            RESULT = nuevaConc;
+            //System.out.println("Concatenacion " + nuevaConc.getHder().getAN() + "-" + nuevaConc.getHizq().getAN());
+            if(nuevaConc.getHder().getAN() == "AN" && nuevaConc.getHizq().getAN() == "AN"){
+            nuevaConc.setAN("AN");
+            nuevaConc.setFirst(nuevaConc.getHizq().getFirst() + "," +  nuevaConc.getHder().getFirst());
+            nuevaConc.setLast(nuevaConc.getHizq().getLast() + "," +  nuevaConc.getHder().getLast());
+            primeros = nuevaConc.getHizq().getFirst() + "," +  nuevaConc.getHder().getFirst();
+            }else{
+            nuevaConc.setAN("N");
+            nuevaConc.setFirst(nuevaConc.getHizq().getFirst());
+            nuevaConc.setLast(nuevaConc.getHder().getLast());
+            primeros = nuevaConc.getHizq().getFirst();
+            } 
+            :} 
+
+            | or EXPRESION:a EXPRESION:b {://RESULT=a + b; 
+            //System.out.println("Or " + a.getValor() + b.getValor());
+            Nodo nuevaOr = new Nodo(a, b, "\\|", parser.contId, " ", " ", " ", " ");
+            parser.contId++;
+            RESULT = nuevaOr;
+            //System.out.println("Or " + nuevaOr.getHder().getAN() + "-" + nuevaOr.getHizq().getAN());
+            if(nuevaOr.getHder().getAN() == "AN" || nuevaOr.getHizq().getAN() == "AN"){
+            nuevaOr.setAN("AN");
+            }else{
+            nuevaOr.setAN("N");
+            }
+
+            nuevaOr.setFirst(nuevaOr.getHizq().getFirst() + "," +  nuevaOr.getHder().getFirst());
+            nuevaOr.setLast(nuevaOr.getHizq().getLast() + "," +  nuevaOr.getHder().getLast());
+            primeros = nuevaOr.getHizq().getFirst() + "," +  nuevaOr.getHder().getFirst();
+            :} 
+
+            | inter EXPRESION:a {://RESULT=a; 
+            //System.out.println("Cero o una vez " + a.getValor() );
+            Nodo nuevaInter = new Nodo(null, a, "?", parser.contId, " ", "A", " "," ");
+            parser.contId++;
+            RESULT = nuevaInter;
+            nuevaInter.setFirst(nuevaInter.getHder().getFirst());
+            nuevaInter.setLast(nuevaInter.getHder().getLast());
+            primeros = nuevaInter.getHder().getFirst();
+            :}  
+
+            | llaveiz id:val {://RESULT=val;
+            Nodo nuevoId = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contId - 1), "N" , Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1));
+            parser.contId++;
+            parser.contI++;
+            RESULT = nuevoId;
+            :} llaveder
+
+            | cadena:val {://RESULT=val;
+            Nodo nuevaCad = new Nodo(null, null, val.replace("\"", ""), parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1));
+            parser.contId++;
+            parser.contI++;
+            RESULT = nuevaCad;
+            :}
+
+            | comilla:val {://RESULT=val;
+            Nodo nuevaCom1 = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1));
+            parser.contId++;
+            parser.contI++;
+            RESULT = nuevaCom1;
+            :}
+
+            | comilla2:val {://RESULT=val;
+            Nodo nuevaCom2 = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1));
+            parser.contId++;
+            parser.contI++;
+            RESULT = nuevaCom2;
+            :}
+
+            | salto:val {://RESULT=val;
+            Nodo nuevoSal = new Nodo(null, null,"\\" + val, parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1));
+            parser.contId++;
+            parser.contI++;
+            RESULT = nuevoSal;
+            :}; 
 
 BLOQUE2::= BLOQUE2 porcentaje porcentaje
         | porcentaje;

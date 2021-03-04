@@ -7,6 +7,9 @@ package analizadores;
 
 import java_cup.runtime.*;
 import proyecto.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -206,6 +209,74 @@ public class parser extends java_cup.runtime.lr_parser {
 
 
   
+
+    public static int contId=2;
+    public static int contI=0;
+    public static int contarbol = 1;
+    public static String primeros = ""; 
+    public static Nodo Raiz;
+    public static void graficarArbol(Nodo act, String nombre){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot");
+            pw = new PrintWriter(fichero);
+            pw.println("digraph G{");
+            pw.println("rankdir=UD");
+            pw.println("concentrate=true");
+            pw.println("node[shape=record]");
+            pw.println("struct0[ label =\" {N|{" + primeros + "|.|" + (contI + 1) + "}|} \"];");
+            pw.println("struct1[ label =\" {N|{" + (contI + 1) + "|#|" + (contI + 1) + "} |" + (contI + 1) + "} \"];");
+            pw.println(act.getCodigoInterno());
+            pw.println("struct0->struct" + (contId - 1));
+            pw.println("struct0->struct1");
+            pw.println("}");
+            System.out.println("Archivo generado correctamente");
+        } catch (Exception e) {
+            System.out.println("error, no se realizo el archivo");
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        //para compilar el archivo dot y obtener la imagen
+        try {
+            //dirección doonde se ecnuentra el compilador de graphviz
+            String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
+            //dirección del archivo dot
+            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot";
+            //dirección donde se creara la magen
+            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\" +nombre+ ".jpg";
+            //tipo de conversón
+            String tParam = "-Tjpg";
+            String tOParam = "-o";
+
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+
+            Runtime rt = Runtime.getRuntime();
+
+            rt.exec(cmd);
+
+            contId=2;
+            contI=0;
+            primeros = "";
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+        }
+    }
+     
+
     //-----------------------------------------para errores sintacticos-------------------------------------------------------------------------------------------
     public void syntax_error(Symbol s)
     {
@@ -251,7 +322,7 @@ class CUP$parser$actions {
               Object RESULT =null;
 		int start_valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int start_valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
-		String start_val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		Nodo start_val = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		RESULT = start_val;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("$START",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -262,7 +333,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 1: // INICIO ::= llaveiz BLOQUE1 BLOQUE2 BLOQUE3 llaveder 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("INICIO",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -271,7 +342,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 2: // BLOQUE1 ::= DEFCONJ DEFEXPR 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("BLOQUE1",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -280,7 +351,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 3: // DEFCONJ ::= DEFCONJ conj dpuntos id flecha NOTACION puntocoma 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFCONJ",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -289,7 +360,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 4: // DEFCONJ ::= conj dpuntos id flecha NOTACION puntocoma 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFCONJ",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -298,7 +369,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 5: // NOTACION ::= letra sconj letra 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -307,7 +378,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 6: // NOTACION ::= entero sconj entero 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -316,7 +387,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 7: // NOTACION ::= simbolo sconj simbolo 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -325,7 +396,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 8: // NOTACION ::= letra sconj entero 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -334,7 +405,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 9: // NOTACION ::= letra sconj simbolo 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -343,7 +414,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 10: // NOTACION ::= entero sconj letra 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -352,7 +423,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 11: // NOTACION ::= entero sconj simbolo 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -361,7 +432,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 12: // NOTACION ::= simbolo sconj entero 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -370,7 +441,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 13: // NOTACION ::= simbolo sconj letra 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -379,7 +450,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 14: // NOTACION ::= letra NOTACION2 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -388,7 +459,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 15: // NOTACION ::= entero NOTACION2 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -397,7 +468,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 16: // NOTACION ::= simbolo NOTACION2 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -406,7 +477,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 17: // NOTACION2 ::= NOTACION2 coma letra 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -415,7 +486,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 18: // NOTACION2 ::= NOTACION2 coma entero 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -424,7 +495,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 19: // NOTACION2 ::= NOTACION2 coma simbolo 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -433,7 +504,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 20: // NOTACION2 ::= coma letra 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -442,7 +513,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 21: // NOTACION2 ::= coma entero 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -451,7 +522,7 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 22: // NOTACION2 ::= coma simbolo 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NOTACION2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -460,11 +531,16 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 23: // NT$0 ::= 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		String valor = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
- System.out.println("Valor " + valor); //proyecto.Interfaz.list_of_names+=valor;
+		Nodo valor = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+ //System.out.println("Valor " + valor.getValor());
+            parser.Raiz = valor;
+            graficarArbol(valor,"arbol" + Integer.toString(parser.contarbol));
+            parser.contarbol++;
+            //proyecto.Interfaz.list_of_names+=valor;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NT$0",10, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -472,12 +548,12 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 24: // DEFEXPR ::= DEFEXPR id flecha EXPRESION NT$0 puntocoma 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
               // propagate RESULT from NT$0
-                RESULT = (String) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+                RESULT = (Nodo) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
-		String valor = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		Nodo valor = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFEXPR",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -486,11 +562,16 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 25: // NT$1 ::= 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		String valor = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
- System.out.println("Valor " + valor); //proyecto.Interfaz.list_of_names+=valor;
+		Nodo valor = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+ //System.out.println("Valor " + valor.getValor());
+            parser.Raiz = valor;
+            graficarArbol(valor,"arbol" + Integer.toString(parser.contarbol));
+            parser.contarbol++;
+            //proyecto.Interfaz.list_of_names+=valor;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NT$1",11, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -498,12 +579,12 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 26: // DEFEXPR ::= id flecha EXPRESION NT$1 puntocoma 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
               // propagate RESULT from NT$1
-                RESULT = (String) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+                RESULT = (Nodo) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
-		String valor = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		Nodo valor = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFEXPR",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -512,11 +593,19 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 27: // EXPRESION ::= suma EXPRESION 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT=a; System.out.println("Una o más veces " + a);
+		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		//RESULT=a; 
+            //System.out.println("Una o más veces " + a.getValor());
+            Nodo nuevaSuma = new Nodo(null, a, "+", parser.contId, " ", "N" , " " , " ");
+            parser.contId++;
+            RESULT = nuevaSuma;
+            nuevaSuma.setFirst(nuevaSuma.getHder().getFirst());
+            nuevaSuma.setLast(nuevaSuma.getHder().getLast());
+            primeros = nuevaSuma.getHder().getFirst();
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -524,11 +613,24 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 28: // EXPRESION ::= mult EXPRESION 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT=a; System.out.println("Cero o más veces " + a);
+		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		//RESULT=a; 
+            //System.out.println("Cero o más veces " + a.getValor());
+            Nodo nuevaMult = new Nodo(null, a, "*", parser.contId, " ", " ", " ", " ");
+            parser.contId++;
+            RESULT = nuevaMult;
+            if(nuevaMult.getHder().getAN() == "AN"){
+            nuevaMult.setAN("AN");
+            }else{
+            nuevaMult.setAN("N");
+            }
+            nuevaMult.setFirst(nuevaMult.getHder().getFirst());
+            nuevaMult.setLast(nuevaMult.getHder().getLast());
+            primeros = nuevaMult.getHder().getFirst();
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -536,14 +638,31 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 29: // EXPRESION ::= conc EXPRESION EXPRESION 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
-		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		int bleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT= a + b;System.out.println("Concatenacion " + a + b);
+		Nodo b = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		//RESULT= a + b;
+            //System.out.println("Concatenacion " + a.getValor() + b.getValor());
+            Nodo nuevaConc = new Nodo(a, b, ".", parser.contId, " ", " ", " ", " ");
+            parser.contId++;
+            RESULT = nuevaConc;
+            //System.out.println("Concatenacion " + nuevaConc.getHder().getAN() + "-" + nuevaConc.getHizq().getAN());
+            if(nuevaConc.getHder().getAN() == "AN" && nuevaConc.getHizq().getAN() == "AN"){
+            nuevaConc.setAN("AN");
+            nuevaConc.setFirst(nuevaConc.getHizq().getFirst() + "," +  nuevaConc.getHder().getFirst());
+            nuevaConc.setLast(nuevaConc.getHizq().getLast() + "," +  nuevaConc.getHder().getLast());
+            primeros = nuevaConc.getHizq().getFirst() + "," +  nuevaConc.getHder().getFirst();
+            }else{
+            nuevaConc.setAN("N");
+            nuevaConc.setFirst(nuevaConc.getHizq().getFirst());
+            nuevaConc.setLast(nuevaConc.getHder().getLast());
+            primeros = nuevaConc.getHizq().getFirst();
+            } 
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -551,14 +670,29 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 30: // EXPRESION ::= or EXPRESION EXPRESION 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
-		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		int bleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT=a + b; System.out.println("Or " + a + b);
+		Nodo b = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		//RESULT=a + b; 
+            //System.out.println("Or " + a.getValor() + b.getValor());
+            Nodo nuevaOr = new Nodo(a, b, "\\|", parser.contId, " ", " ", " ", " ");
+            parser.contId++;
+            RESULT = nuevaOr;
+            //System.out.println("Or " + nuevaOr.getHder().getAN() + "-" + nuevaOr.getHizq().getAN());
+            if(nuevaOr.getHder().getAN() == "AN" || nuevaOr.getHizq().getAN() == "AN"){
+            nuevaOr.setAN("AN");
+            }else{
+            nuevaOr.setAN("N");
+            }
+
+            nuevaOr.setFirst(nuevaOr.getHizq().getFirst() + "," +  nuevaOr.getHder().getFirst());
+            nuevaOr.setLast(nuevaOr.getHizq().getLast() + "," +  nuevaOr.getHder().getLast());
+            primeros = nuevaOr.getHizq().getFirst() + "," +  nuevaOr.getHder().getFirst();
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -566,11 +700,19 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 31: // EXPRESION ::= inter EXPRESION 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT=a; System.out.println("Cero o una vez " + a );
+		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		//RESULT=a; 
+            //System.out.println("Cero o una vez " + a.getValor() );
+            Nodo nuevaInter = new Nodo(null, a, "?", parser.contId, " ", "A", " "," ");
+            parser.contId++;
+            RESULT = nuevaInter;
+            nuevaInter.setFirst(nuevaInter.getHder().getFirst());
+            nuevaInter.setLast(nuevaInter.getHder().getLast());
+            primeros = nuevaInter.getHder().getFirst();
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -578,11 +720,16 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 32: // NT$2 ::= 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-RESULT=val;
+//RESULT=val;
+            Nodo nuevoId = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contId - 1), "N" , Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1));
+            parser.contId++;
+            parser.contI++;
+            RESULT = nuevoId;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NT$2",12, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -590,9 +737,9 @@ RESULT=val;
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 33: // EXPRESION ::= llaveiz id NT$2 llaveder 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
               // propagate RESULT from NT$2
-                RESULT = (String) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+                RESULT = (Nodo) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
@@ -604,11 +751,16 @@ RESULT=val;
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 34: // EXPRESION ::= cadena 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT=val;
+		//RESULT=val;
+            Nodo nuevaCad = new Nodo(null, null, val.replace("\"", ""), parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1));
+            parser.contId++;
+            parser.contI++;
+            RESULT = nuevaCad;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",1, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -616,11 +768,16 @@ RESULT=val;
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 35: // EXPRESION ::= comilla 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT=val;
+		//RESULT=val;
+            Nodo nuevaCom1 = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1));
+            parser.contId++;
+            parser.contI++;
+            RESULT = nuevaCom1;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",1, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -628,11 +785,16 @@ RESULT=val;
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 36: // EXPRESION ::= comilla2 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT=val;
+		//RESULT=val;
+            Nodo nuevaCom2 = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1));
+            parser.contId++;
+            parser.contI++;
+            RESULT = nuevaCom2;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",1, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -640,11 +802,16 @@ RESULT=val;
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 37: // EXPRESION ::= salto 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 		int valleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT=val;
+		//RESULT=val;
+            Nodo nuevoSal = new Nodo(null, null,"\\" + val, parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1));
+            parser.contId++;
+            parser.contI++;
+            RESULT = nuevoSal;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",1, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -652,7 +819,7 @@ RESULT=val;
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 38: // BLOQUE2 ::= BLOQUE2 porcentaje porcentaje 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("BLOQUE2",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -661,7 +828,7 @@ RESULT=val;
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 39: // BLOQUE2 ::= porcentaje 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("BLOQUE2",7, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -670,7 +837,7 @@ RESULT=val;
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 40: // BLOQUE3 ::= DEFCADENA 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("BLOQUE3",8, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -679,7 +846,7 @@ RESULT=val;
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 41: // DEFCADENA ::= DEFCADENA id dpuntos cadena puntocoma 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFCADENA",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -688,7 +855,7 @@ RESULT=val;
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 42: // DEFCADENA ::= id dpuntos cadena puntocoma 
             {
-              String RESULT =null;
+              Nodo RESULT =null;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFCADENA",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
