@@ -19,8 +19,9 @@ public class Nodo {
     public String an;
     public String first;
     public String last;
+    public String follow;
 
-    public Nodo(Nodo hizq, Nodo hder, String valor, int id, String i, String an, String first, String last) {
+    public Nodo(Nodo hizq, Nodo hder, String valor, int id, String i, String an, String first, String last, String follow) {
         this.hizq = hizq;
         this.hder = hder;
         this.valor = valor;
@@ -29,6 +30,7 @@ public class Nodo {
         this.an = an;
         this.first = first;
         this.last = last;
+        this.follow = follow;
     }
 
     public Nodo getHizq() {
@@ -93,6 +95,14 @@ public class Nodo {
 
     public void setLast(String last) {
         this.last = last;
+    }
+    
+    public String getFollow() {
+        return follow;
+    }
+
+    public void setFollow(String follow) {
+        this.follow = follow;
     }
     
     public String getCodigoInterno() {
