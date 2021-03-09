@@ -996,9 +996,14 @@ class CUP$parser$actions {
 		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		//RESULT=a; 
             //System.out.println("Una o más veces " + a.getValor());
-            Nodo nuevaSuma = new Nodo(null, a, "+", parser.contId, " ", "N" , " " , " ", " ");
+            Nodo nuevaSuma = new Nodo(null, a, "+", parser.contId, " ", " " , " " , " ", " ");
             parser.contId++;
             RESULT = nuevaSuma;
+            if(nuevaSuma.getHder().getAN() == "AN"){
+            nuevaSuma.setAN("AN");
+            }else{
+            nuevaSuma.setAN("N");
+            }
             nuevaSuma.setFirst(nuevaSuma.getHder().getFirst());
             nuevaSuma.setLast(nuevaSuma.getHder().getLast());
             primeros = nuevaSuma.getFirst();
@@ -1021,14 +1026,9 @@ class CUP$parser$actions {
 		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		//RESULT=a; 
             //System.out.println("Cero o más veces " + a.getValor());
-            Nodo nuevaMult = new Nodo(null, a, "*", parser.contId, " ", " ", " ", " ", " ");
+            Nodo nuevaMult = new Nodo(null, a, "*", parser.contId, " ", "A", " ", " ", " ");
             parser.contId++;
             RESULT = nuevaMult;
-            if(nuevaMult.getHder().getAN() == "AN"){
-            nuevaMult.setAN("AN");
-            }else{
-            nuevaMult.setAN("N");
-            }
             nuevaMult.setFirst(nuevaMult.getHder().getFirst());
             nuevaMult.setLast(nuevaMult.getHder().getLast());
             primeros = nuevaMult.getFirst();
@@ -1058,19 +1058,30 @@ class CUP$parser$actions {
             parser.contId++;
             RESULT = nuevaConc;
             //System.out.println("Concatenacion " + nuevaConc.getHder().getAN() + "-" + nuevaConc.getHizq().getAN());
-            if(nuevaConc.getHder().getAN() == "AN" && nuevaConc.getHizq().getAN() == "AN"){
-            nuevaConc.setAN("AN");
-            nuevaConc.setFirst(nuevaConc.getHizq().getFirst() + "," +  nuevaConc.getHder().getFirst());
-            nuevaConc.setLast(nuevaConc.getHizq().getLast() + "," +  nuevaConc.getHder().getLast());
-            primeros = nuevaConc.getFirst();
-            ultimos = nuevaConc.getLast();
+            if(nuevaConc.getHder().getAN() == "A" && nuevaConc.getHizq().getAN() == "A"){
+                nuevaConc.setAN("A");
             }else{
-            nuevaConc.setAN("N");
-            nuevaConc.setFirst(nuevaConc.getHizq().getFirst());
-            nuevaConc.setLast(nuevaConc.getHder().getLast());
-            primeros = nuevaConc.getFirst();
-            ultimos = nuevaConc.getLast();
+                nuevaConc.setAN("N");
             }
+            if(nuevaConc.getHizq().getAN() == "A"){
+                nuevaConc.setFirst(nuevaConc.getHizq().getFirst() + "," +  nuevaConc.getHder().getFirst());
+                primeros = nuevaConc.getFirst();
+            }else{
+                nuevaConc.setFirst(nuevaConc.getHizq().getFirst());
+                primeros = nuevaConc.getFirst();
+            }
+            //System.out.println("Anulabilidad " + nuevaConc.getHder().getAN());
+            if(nuevaConc.getHder().getAN() == "A"){
+                //System.out.println("Entrando a condicion si es anulable");
+                nuevaConc.setLast(nuevaConc.getHizq().getLast() + "," +  nuevaConc.getHder().getLast());
+                ultimos = nuevaConc.getLast();
+                //System.out.println(nuevaConc.getLast());
+            }else{
+                nuevaConc.setLast(nuevaConc.getHder().getLast());
+                ultimos = nuevaConc.getLast();
+                //System.out.println(nuevaConc.getLast());
+            }
+
             nuevaConc.setFollow(nuevaConc.getHizq().getLast() + "-" + nuevaConc.getHder().getFirst());
             siguientes(nuevaConc.getHizq().getLast(),nuevaConc.getHder().getFirst());
             //siguientes.add(nuevaConc.getFollow());
@@ -1096,8 +1107,8 @@ class CUP$parser$actions {
             parser.contId++;
             RESULT = nuevaOr;
             //System.out.println("Or " + nuevaOr.getHder().getAN() + "-" + nuevaOr.getHizq().getAN());
-            if(nuevaOr.getHder().getAN() == "AN" || nuevaOr.getHizq().getAN() == "AN"){
-            nuevaOr.setAN("AN");
+            if(nuevaOr.getHder().getAN() == "A" || nuevaOr.getHizq().getAN() == "A"){
+            nuevaOr.setAN("A");
             }else{
             nuevaOr.setAN("N");
             }
