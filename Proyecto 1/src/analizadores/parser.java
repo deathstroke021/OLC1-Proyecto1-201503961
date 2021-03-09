@@ -219,6 +219,9 @@ public class parser extends java_cup.runtime.lr_parser {
     public static Nodo Raiz;
     public static ArrayList<String> siguientes = new ArrayList();
     public static ArrayList<String> hojas = new ArrayList();
+    public static ArrayList<String> transiciones = new ArrayList();
+    public static ArrayList<String> estados = new ArrayList();
+    public static ArrayList<String> hojasauxiliar = new ArrayList();
 
     public static void graficarArbol(Nodo act, String nombre){
         FileWriter fichero = null;
@@ -230,6 +233,7 @@ public class parser extends java_cup.runtime.lr_parser {
             pw.println("rankdir=UD");
             pw.println("concentrate=true");
             pw.println("node[shape=record]");
+            //System.out.println("primeros:" + primeros);
             pw.println("struct0[ label =\" {N|{" + primeros + "|.|" + (contI + 1) + "}|} \"];");
             pw.println("struct1[ label =\" {N|{" + (contI + 1) + "|#|" + (contI + 1) + "} |" + (contI + 1) + "} \"];");
             pw.println(act.getCodigoInterno());
@@ -350,8 +354,130 @@ public class parser extends java_cup.runtime.lr_parser {
 
             rt.exec(cmd);
 
+            transicion();
+            graficarTransiciones("transiciones" + Integer.toString(parser.contarbol));
+
             siguientes.clear();
             hojas.clear();
+            transiciones.clear();
+            estados.clear();
+            hojasauxiliar.clear();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+        }
+    }
+
+public static void graficarTransiciones(String nombre){
+        //int contador= 0;
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot");
+            pw = new PrintWriter(fichero);
+            /*for(int i = 0;i < transiciones.size();i++){
+                pw.println(transiciones.get(i));
+            */
+            pw.println("digraph H{");
+            pw.println("parent [");
+            pw.println("shape=plaintext");
+            pw.println("label=<");
+            pw.println("<table border=\'1\' cellborder=\'1\'>");
+            pw.println("<tr><td>Estado</td>");
+            //Encabezado
+            for(int i = 0;i < hojas.size();i++){
+                boolean hestado = true;
+                String[] part = hojas.get(i).split("-");
+                for(int j = 0;j < hojas.size();j++){
+                    String[] part2 = hojas.get(j).split("-");
+                    //System.out.println(part[1]+ " COMPARANDO " + part2[1]);
+                    if(part[1].equals(part2[1]) && j!=i && j <= i){
+                        //System.out.println("Ya existe hoja");
+                        hestado = false;
+                        j=hojas.size();
+                    }else if(j == i){
+                        j=hojas.size();
+                    } 
+                }
+                if(hestado == true){
+                    System.out.println(part[1]);
+                    pw.println("<td>" + part[1] + "</td>");
+                    hojasauxiliar.add(part[1]);
+                    //contador++;
+                }
+            }
+            pw.println("</tr>");
+
+            for(int i = 0;i < estados.size();i++){ // filas
+                pw.println("<tr><td>" + estados.get(i) + "</td>");
+                String estadoaux = estados.get(i);
+                //System.out.println("Fila " + estados.get(i));
+                for(int j = 0;j < hojasauxiliar.size();j++){ // columnas
+                boolean transicion = false;
+                String hojaux = hojasauxiliar.get(j);
+                //System.out.println("Columna" + j);
+                    for(int k = 0;k < transiciones.size();k++){  //buscar en array de trancisiones
+                        String aux = "";
+                        String[] part = transiciones.get(k).split("-");
+                        //System.out.println(transiciones.get(k));
+                        for(int l = 0;l < hojas.size();l++){ //buscar valor de la hoja
+                            String[] part2 = hojas.get(l).split("-");
+                            if(part[0].equals(part2[0])){
+                                aux = part2[1];
+                                l = hojas.size();
+                                //System.out.println(aux);
+                            }  
+                        }
+                       if(part[2].equals(estadoaux) && aux.equals(hojaux)){
+                            pw.println("<td>" + part[3] +"</td>");
+                            transicion = true;
+                       }
+                    }
+                    if(transicion == false){
+                        pw.println("<td> - </td>");
+                    }
+                }
+                pw.println("</tr>");
+            }
+            pw.println("</table>");
+            pw.println(">];");
+            pw.println("}");
+            System.out.println("Archivo Transiciones generado correctamente");
+        } catch (Exception e) {
+            System.out.println("error, no se realizo el archivo");
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        //para compilar el archivo dot y obtener la imagen
+        try {
+            //dirección doonde se ecnuentra el compilador de graphviz
+            String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
+            //dirección del archivo dot
+            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot";
+            //dirección donde se creara la magen
+            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\" +nombre+ ".jpg";
+            //tipo de conversón
+            String tParam = "-Tjpg";
+            String tOParam = "-o";
+
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+
+            Runtime rt = Runtime.getRuntime();
+
+            rt.exec(cmd);
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -382,6 +508,71 @@ public class parser extends java_cup.runtime.lr_parser {
                 siguientes.add(parts[i] + "-" + siguiente);
             }
             }
+ 
+    }
+
+    public static void transicion(){
+        int cestado = 0;
+        int testado = 1;
+        String[] parts = primeros.split(",");
+        //System.out.println("raiz");
+        //System.out.println(primeros);
+        //For solo para primeros
+        for(int i=0; i< parts.length; i++){
+            for(int j = 0;j < siguientes.size();j++){
+                String[] parts2 = siguientes.get(j).split("-");
+                if(parts[i].equals(parts2[0])){
+                    transiciones.add(siguientes.get(j) + "-S" + cestado);
+                    //System.out.println(siguientes.get(j));
+                    j = siguientes.size();
+                }
+                     
+            }    
+        }
+        
+        estados.add("S" + cestado);
+        cestado++;
+        
+        //Cada transicion
+        for(int i = 0;i < transiciones.size();i++){
+                boolean estado = true;
+                //System.out.println("Demas transiciones " + i);
+                //System.out.println(transiciones.get(i));
+                String[] part = transiciones.get(i).split("-");
+                for(int j = 0;j < transiciones.size() ;j++){
+                    //System.out.println("Entrando a for" + i + "-" + j);
+                    String[] parts2 = transiciones.get(j).split("-");
+                    //System.out.println(part[1] + " COMPARANDO " + parts2[1]);
+                    if(part[1].equals(parts2[1]) && j != i  && j<= i){
+                        //System.out.println("Ya existe transicion");
+                        estado = false;
+                        transiciones.set(i,transiciones.get(i) + "-" +parts2[3]);
+                        j = transiciones.size();
+                    }else if (j == i){
+                        j = transiciones.size();
+                    }
+                }
+                if(estado == true){
+                    transiciones.set(i,transiciones.get(i) + "-S" + testado);
+                    testado++;
+                    String[] parts3 = part[1].split(",");
+                    for(int k=0; k< parts3.length; k++){
+                        for(int l = 0;l < siguientes.size();l++){
+                            String[] parts4 = siguientes.get(l).split("-");
+                            if(parts3[k].equals(parts4[0])){
+                                transiciones.add(siguientes.get(l) + "-S" + cestado);
+                                //System.out.println(siguientes.get(l));
+                                l = siguientes.size();
+                            }
+                     
+                        }
+                    }
+                    estados.add("S" + cestado);
+                    cestado++;
+                }
+     
+        }
+              
     }
      
 
