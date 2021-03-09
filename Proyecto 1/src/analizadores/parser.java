@@ -222,6 +222,8 @@ public class parser extends java_cup.runtime.lr_parser {
     public static ArrayList<String> transiciones = new ArrayList();
     public static ArrayList<String> estados = new ArrayList();
     public static ArrayList<String> hojasauxiliar = new ArrayList();
+    public static ArrayList<String> afd = new ArrayList();
+    public static ArrayList<String> estadosaceptacion = new ArrayList();
 
     public static void graficarArbol(Nodo act, String nombre){
         FileWriter fichero = null;
@@ -356,12 +358,15 @@ public class parser extends java_cup.runtime.lr_parser {
 
             transicion();
             graficarTransiciones("transiciones" + Integer.toString(parser.contarbol));
+            graficarAFD("afd" + Integer.toString(parser.contarbol));
 
             siguientes.clear();
             hojas.clear();
             transiciones.clear();
             estados.clear();
             hojasauxiliar.clear();
+            afd.clear();
+            estadosaceptacion.clear();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -378,6 +383,7 @@ public static void graficarTransiciones(String nombre){
             pw = new PrintWriter(fichero);
             /*for(int i = 0;i < transiciones.size();i++){
                 pw.println(transiciones.get(i));
+                }
             */
             pw.println("digraph H{");
             pw.println("parent [");
@@ -432,6 +438,7 @@ public static void graficarTransiciones(String nombre){
                        if(part[2].equals(estadoaux) && aux.equals(hojaux)){
                             pw.println("<td>" + part[3] +"</td>");
                             transicion = true;
+                            afd.add(estadoaux + "-" + part[3] + "-" + hojaux);
                        }
                     }
                     if(transicion == false){
@@ -478,6 +485,77 @@ public static void graficarTransiciones(String nombre){
 
             rt.exec(cmd);
 
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+        }
+    }
+
+    public static void graficarAFD(String nombre){
+        aceptacion();
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot");
+            pw = new PrintWriter(fichero);
+            pw.println("digraph automata_finito {");
+            pw.println("rankdir=LR;");
+            pw.println("graph [label=\"AFD\", labelloc=t, fontsize=20];");
+            pw.print("node [shape=doublecircle, style = filled,color = mediumseagreen]; ");
+            for(int i = 0;i < estados.size();i++){
+                for(int j = 0;j < estadosaceptacion.size();j++){
+                    if(!(estados.get(i).equals(estadosaceptacion.get(j)))){
+                        pw.print(estados.get(i) + " ");
+                    }
+                }
+            }
+            pw.println(";");
+            pw.println("node [shape=circle];");
+            pw.println("node [color=midnightblue,fontcolor=white];");
+            pw.println("edge [color=black];");
+            pw.println("secret_node [style=invis];");
+            pw.println("secret_node -> S0 [label=\"inicio\"];");
+
+            for(int i = 0;i < afd.size();i++){
+                String[] part = afd.get(i).split("-");
+                pw.println(part[0] + "->" + part[1] + "[label=\"" + part[2] + "\"];" );
+            }
+            pw.println("}");
+            System.out.println("AFD generado correctamente");
+        } catch (Exception e) {
+            System.out.println("error, no se realizo el archivo");
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        //para compilar el archivo dot y obtener la imagen
+        try {
+            //dirección doonde se ecnuentra el compilador de graphviz
+            String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
+            //dirección del archivo dot
+            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot";
+            //dirección donde se creara la magen
+            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\" +nombre+ ".jpg";
+            //tipo de conversón
+            String tParam = "-Tjpg";
+            String tOParam = "-o";
+
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+
+            Runtime rt = Runtime.getRuntime();
+
+            rt.exec(cmd);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -574,6 +652,26 @@ public static void graficarTransiciones(String nombre){
         }
               
     }
+
+    public static void aceptacion(){
+        int acept = contI + 1;
+        for(int i= 0;i < transiciones.size() ;i++){
+            String[] part = transiciones.get(i).split("-");
+            String[] part2 = part[1].split(",");
+                for(int j= 0;j < part2.length; j++){
+                    if(Integer.parseInt(part2[j]) == acept){
+                        if(estadosaceptacion.contains(part[3]) == false){
+                            estadosaceptacion.add(part[3]);
+                        }
+                        
+                    }
+                }
+            
+            
+        }
+
+    }
+
      
 
     //-----------------------------------------para errores sintacticos-------------------------------------------------------------------------------------------
@@ -1074,7 +1172,7 @@ class CUP$parser$actions {
 		String val = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		//RESULT=val;
             Nodo nuevaCad = new Nodo(null, null, val.replace("\"", ""), parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1), " ");
-            hojas.add(Integer.toString(parser.contId - 1) + "-" + val);
+            hojas.add(Integer.toString(parser.contId - 1) + "-" +  val.replace("\"", ""));
             parser.contId++;
             parser.contI++;
             RESULT = nuevaCad;
