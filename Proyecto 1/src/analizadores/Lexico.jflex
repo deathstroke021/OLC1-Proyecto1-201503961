@@ -1,5 +1,6 @@
 package analizadores;
 import java_cup.runtime.*;
+import proyecto.*;
 
 %%
 
@@ -51,7 +52,10 @@ cadena = {cadena1}|{cadena2}|{cadena3}
 //nombre = {letra}+
 
 %{
-    
+    public void AddError(String tipo, String lexema, int fila, int columna){
+        Errores nuevoE= new Errores(tipo, lexema, fila+1, columna+1);
+        proyecto.Interfaz.listaErrores.add(nuevoE);
+    }
 %}
 
 %%
@@ -130,6 +134,7 @@ cadena = {cadena1}|{cadena2}|{cadena3}
 //CUALQUIER ERROR:           SIMBOLOS NO DEFINIDOS DENTRO DEL LENGUAJE
 .   {
 	    System.err.println("Error lexico: "+yytext()+ " Linea:"+(yyline)+" Columna:"+(yycolumn));
+            AddError("Error Léxico",yytext(),yyline,yycolumn);
     }
 
 /*   . {

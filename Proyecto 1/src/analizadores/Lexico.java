@@ -2,6 +2,7 @@
 
 package analizadores;
 import java_cup.runtime.*;
+import proyecto.*;
 
 
 /**
@@ -264,7 +265,10 @@ public class Lexico implements java_cup.runtime.Scanner {
   /* user code: */
     String cadena="";
 
-    
+    public void AddError(String tipo, String lexema, int fila, int columna){
+        Errores nuevoE= new Errores(tipo, lexema, fila+1, columna+1);
+        proyecto.Interfaz.listaErrores.add(nuevoE);
+    }
 
 
   /**
@@ -653,6 +657,7 @@ public class Lexico implements java_cup.runtime.Scanner {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
             { System.err.println("Error lexico: "+yytext()+ " Linea:"+(yyline)+" Columna:"+(yycolumn));
+            AddError("Error Léxico",yytext(),yyline,yycolumn);
             } 
             // fall through
           case 35: break;

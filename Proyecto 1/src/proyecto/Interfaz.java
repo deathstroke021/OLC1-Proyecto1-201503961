@@ -12,6 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -26,6 +29,7 @@ public class Interfaz extends javax.swing.JFrame {
      * Creates new form Editor
      */
     public static String list_of_names="";
+    public static ArrayList<Errores> listaErrores = new ArrayList<Errores>();
     
     public Interfaz() {
         initComponents();
@@ -296,6 +300,9 @@ public class Interfaz extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         list_of_names="";
+        listaErrores.clear();
+        //jTextArea1.setText("");
+        
         try {
             String path = jTextArea1.getText();
             analizadores.parser sintactico;
@@ -304,11 +311,68 @@ public class Interfaz extends javax.swing.JFrame {
             //jTextArea3.setText(list_of_names);
         } catch (Exception e) {
         }
+        
+        /*for(int i =0; i<listaErrores.size();i++){
+            System.out.println("i: "+i+" Tipo: "+listaErrores.get(i).tipoError+" valorError:"+listaErrores.get(i).valorError+" fila:"+listaErrores.get(i).fila+" Columna:"+listaErrores.get(i).columna);
+        }*/
+        ReporteErrores();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    
+    public void ReporteErrores(){
+        FileWriter fichero = null;
+                PrintWriter pw = null;
+                try {
+                    fichero = new FileWriter("C:\\\\Users\\\\Fernando Armira\\\\Documents\\Reporte Errores.html");
+                    pw = new PrintWriter(fichero);
+                    //comenzamos a escribir el html
+                    pw.println("<html>");
+                    pw.println("<head><title>REPORTE DE ERRORES</title></head>");
+                    pw.println("<body>");
+                    pw.println("<div align=\"center\">");
+                    pw.println("<h1>Reporte de Errores</h1>");
+                    pw.println("<br></br>");
+                    pw.println("<table border=1>");
+                    pw.println("<tr>");
+                    pw.println("<td>TIPO</td>");
+                    pw.println("<td>VALOR</td>");
+                    pw.println("<td>FILA</td>");
+                    pw.println("<td>COLUMNA</td>");
+                    pw.println("</tr>");
+                    for(int i=0;i<listaErrores.size();i++){
+                        pw.println("<tr>");
+                        pw.println("<td>"+listaErrores.get(i).getTipoError()+"</td>");
+                        pw.println("<td>"+listaErrores.get(i).getValorError()+"</td>");
+                        pw.println("<td>"+listaErrores.get(i).getFila()+"</td>");
+                        pw.println("<td>"+listaErrores.get(i).getColumna()+"</td>");
+                        pw.println("</tr>");
+                    }
+                    pw.println("</table>");
+                    pw.println("</div");
+                    pw.println("</body>");
+                    pw.println("</html>");
+                } catch (Exception e) {
+                }finally{
+                    if(null!=fichero){
+                        try {
+                            fichero.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                try {
+            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + "Reportes\\"+"Reporte ErroresL.html");
+            //System.out.println("Final");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
