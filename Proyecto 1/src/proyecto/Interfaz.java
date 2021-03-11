@@ -73,14 +73,14 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Generar Automatas");
+        jButton1.setText("Analizar Entrada");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Analizar entrada");
+        jButton2.setText("Generar Automatas");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
