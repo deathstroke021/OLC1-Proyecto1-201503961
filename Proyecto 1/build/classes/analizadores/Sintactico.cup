@@ -508,8 +508,8 @@ INICIO::= llaveiz BLOQUE1 BLOQUE2 BLOQUE3 llaveder
 
 BLOQUE1::= DEFCONJ DEFEXPR;
 
-DEFCONJ::= DEFCONJ conj dpuntos id flecha NOTACION puntocoma 
-        |conj dpuntos id flecha NOTACION puntocoma
+DEFCONJ::= DEFCONJ conj dpuntos id resta flecha NOTACION puntocoma 
+        |conj dpuntos id resta flecha NOTACION puntocoma
         |error;
 
 NOTACION::= letra sconj letra
@@ -532,13 +532,13 @@ NOTACION2::= NOTACION2 coma letra
         | coma entero
         | coma simbolo;
 
-DEFEXPR::= DEFEXPR id flecha EXPRESION:valor {: //System.out.println("Valor " + valor.getValor());
+DEFEXPR::= DEFEXPR id resta flecha EXPRESION:valor {: //System.out.println("Valor " + valor.getValor());
             parser.Raiz = valor;
             graficarArbol(valor,"arbol" + Integer.toString(parser.contarbol));
             parser.contarbol++;
             //proyecto.Interfaz.list_of_names+=valor;
             :} puntocoma
-           |id flecha EXPRESION:valor {: //System.out.println("Valor " + valor.getValor());
+           |id resta flecha EXPRESION:valor {: //System.out.println("Valor " + valor.getValor());
             parser.Raiz = valor;
             graficarArbol(valor,"arbol" + Integer.toString(parser.contarbol));
             parser.contarbol++;
@@ -646,40 +646,40 @@ EXPRESION ::= suma EXPRESION:a {://RESULT=a;
             :}  
 
             | llaveiz id:val {://RESULT=val;
-            Nodo nuevoId = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contId - 1), "N" , Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1), " ");
-            hojas.add(Integer.toString(parser.contId - 1) + "-" + val);
+            Nodo nuevoId = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contI+1), "N" , Integer.toString(parser.contI+1), Integer.toString(parser.contI+1), " ");
+            hojas.add(Integer.toString(parser.contI + 1) + "-" + val);
             parser.contId++;
             parser.contI++;
             RESULT = nuevoId;
             :} llaveder
 
             | cadena:val {://RESULT=val;
-            Nodo nuevaCad = new Nodo(null, null, val.replace("\"", ""), parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1), " ");
-            hojas.add(Integer.toString(parser.contId - 1) + "-" +  val.replace("\"", ""));
+            Nodo nuevaCad = new Nodo(null, null, val.replace("\"", "").replace("-", "─"), parser.contId, Integer.toString(parser.contI+1), "N", Integer.toString(parser.contI+1), Integer.toString(parser.contI+1), " ");
+            hojas.add(Integer.toString(parser.contI + 1) + "-" +  val.replace("\"", "").replace("-", "─"));
             parser.contId++;
             parser.contI++;
             RESULT = nuevaCad;
             :}
 
             | comilla:val {://RESULT=val;
-            Nodo nuevaCom1 = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1), " ");
-            hojas.add(Integer.toString(parser.contId - 1) + "-" + val);
+            Nodo nuevaCom1 = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contI+1), "N", Integer.toString(parser.contI+1), Integer.toString(parser.contI+1), " ");
+            hojas.add(Integer.toString(parser.contI + 1) + "-" + val);
             parser.contId++;
             parser.contI++;
             RESULT = nuevaCom1;
             :}
 
             | comilla2:val {://RESULT=val;
-            Nodo nuevaCom2 = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1), " ");
-            hojas.add(Integer.toString(parser.contId - 1) + "-" + val);
+            Nodo nuevaCom2 = new Nodo(null, null, val, parser.contId, Integer.toString(parser.contI+1), "N", Integer.toString(parser.contI+1), Integer.toString(parser.contI+1), " ");
+            hojas.add(Integer.toString(parser.contI + 1) + "-" + val);
             parser.contId++;
             parser.contI++;
             RESULT = nuevaCom2; 
             :}
 
             | salto:val {://RESULT=val;
-            Nodo nuevoSal = new Nodo(null, null,"\\" + val, parser.contId, Integer.toString(parser.contId - 1), "N", Integer.toString(parser.contId - 1), Integer.toString(parser.contId - 1), " ");
-            hojas.add(Integer.toString(parser.contId - 1) + "-" + val);
+            Nodo nuevoSal = new Nodo(null, null,"\\" + val, parser.contId, Integer.toString(parser.contI+1), "N", Integer.toString(parser.contI+1), Integer.toString(parser.contI+1), " ");
+            hojas.add(Integer.toString(parser.contI + 1) + "-" + val);
             parser.contId++;
             parser.contI++;
             RESULT = nuevoSal;
@@ -688,7 +688,7 @@ EXPRESION ::= suma EXPRESION:a {://RESULT=a;
             |error; 
 
 BLOQUE2::= BLOQUE2 porcentaje porcentaje
-        | porcentaje
+        | porcentaje porcentaje
         |error;
 
 BLOQUE3::= DEFCADENA;

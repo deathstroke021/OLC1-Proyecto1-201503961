@@ -41,7 +41,7 @@ letra = [a-zA-Z]
 entero = [0-9]+  //0,1,2,3,4,5,6,7,8,9 -> 1111, 125
 decimal = [0-9]+ "." [0-9]+
 id ={letra}({letra}|"_"|[0-9])*
-simbolo = [!-}]
+simbolo =([!]|[#-}])
 cadena1 = "\"" ({letra}|{entero}|{simbolo}|{espacios})* "\""
 cadena2 = "\”" ({letra}|{entero}|{simbolo}|{espacios})* "\”"
 cadena3 = "\'" ({letra}|{entero}|{simbolo}|{espacios})* "\'"
@@ -62,21 +62,21 @@ cadena = {cadena1}|{cadena2}|{cadena3}
 
 /*<STRNG>{
     [\"] {  String temporal=cadena; cadena=""; yybegin(YYINITIAL);
-        System.out.println("\"" + temporal + "\"" );
+        System.out.println("Cadena \"" + temporal + "\"" );
         return new Symbol(sym.cadena, yycolumn,yyline, temporal);   }
     [^\"] { cadena+=yytext(); }
 }
 
 <STRNG2>{
     [\”] {  String temporal=cadena; cadena=""; yybegin(YYINITIAL);
-        System.out.println("\"" + temporal + "\"" );
+        System.out.println("Cadena \"" + temporal + "\"" );
         return new Symbol(sym.cadena, yycolumn,yyline,temporal);   }
     [^\”] { cadena+=yytext(); }
 }
 
 <STRNG3>{
     [\'] {  String temporal=cadena; cadena=""; yybegin(YYINITIAL);
-        System.out.println("\'" + temporal + "\'" );
+        System.out.println("Cadena \'" + temporal + "\'" );
         return new Symbol(sym.cadena, yycolumn,yyline,temporal);   }
     [^\'] { cadena+=yytext(); }
 }*/
@@ -95,37 +95,37 @@ cadena = {cadena1}|{cadena2}|{cadena3}
 //")" {return new Symbol(sym.cparen,yycolumn,yyline,yytext());}
 //"," {return new Symbol(sym.comaa,yycolumn,yyline,yytext());}
 //"," {return new Symbol(sym.comaa,yycolumn,yyline,yytext());}
-"+" {System.out.println(yytext()); return new Symbol(sym.suma,yycolumn,yyline,yytext());}
-"-" {System.out.println(yytext());return new Symbol(sym.resta,yycolumn,yyline,yytext());}
-"*" {System.out.println(yytext());return new Symbol(sym.mult,yycolumn,yyline,yytext());}
-"/" {System.out.println(yytext());return new Symbol(sym.div,yycolumn,yyline,yytext());}
-"->" {System.out.println(yytext());return new Symbol(sym.flecha,yycolumn,yyline,yytext());}
-"," {System.out.println(yytext());return new Symbol(sym.coma,yycolumn,yyline,yytext());}
-";" {System.out.println(yytext());return new Symbol(sym.puntocoma,yycolumn,yyline,yytext());}
-"%" {System.out.println(yytext());return new Symbol(sym.porcentaje,yycolumn,yyline,yytext());}
-":" {System.out.println(yytext());return new Symbol(sym.dpuntos,yycolumn,yyline,yytext());}
-"{" {System.out.println(yytext());return new Symbol(sym.llaveiz,yycolumn,yyline,yytext());}
-"}" {System.out.println(yytext());return new Symbol(sym.llaveder,yycolumn,yyline,yytext());}
-"~" {System.out.println(yytext());return new Symbol(sym.sconj,yycolumn,yyline,yytext());}
-"." {System.out.println(yytext());return new Symbol(sym.conc,yycolumn,yyline,yytext());}
-"|" {System.out.println(yytext());return new Symbol(sym.or,yycolumn,yyline,yytext());}
-"?" {System.out.println(yytext());return new Symbol(sym.inter,yycolumn,yyline,yytext());}
-"\\”" {System.out.println(yytext());return new Symbol(sym.comilla,yycolumn,yyline,yytext());}
-"\\'" {System.out.println(yytext());return new Symbol(sym.comilla2,yycolumn,yyline,yytext());}
-"\\n" {System.out.println(yytext());return new Symbol(sym.salto,yycolumn,yyline,yytext());}
-"conj" {System.out.println(yytext());return new Symbol(sym.conj,yycolumn,yyline,yytext());}
-"tld" {System.out.println(yytext());return new Symbol(sym.tld,yycolumn,yyline,yytext());}
+"+" {System.out.println("Simbolo" + yytext()); return new Symbol(sym.suma,yycolumn,yyline,yytext());}
+"-" {System.out.println("Simbolo" + yytext());return new Symbol(sym.resta,yycolumn,yyline,yytext());}
+"*" {System.out.println("Simbolo" + yytext());return new Symbol(sym.mult,yycolumn,yyline,yytext());}
+"/" {System.out.println("Simbolo" + yytext());return new Symbol(sym.div,yycolumn,yyline,yytext());}
+">" {System.out.println("Simbolo" + yytext());return new Symbol(sym.flecha,yycolumn,yyline,yytext());}
+"," {System.out.println("Simbolo" + yytext());return new Symbol(sym.coma,yycolumn,yyline,yytext());}
+";" {System.out.println("Simbolo" + yytext());return new Symbol(sym.puntocoma,yycolumn,yyline,yytext());}
+"%" {System.out.println("Simbolo" + yytext());return new Symbol(sym.porcentaje,yycolumn,yyline,yytext());}
+":" {System.out.println("Simbolo" + yytext());return new Symbol(sym.dpuntos,yycolumn,yyline,yytext());}
+"{" {System.out.println("Simbolo" + yytext());return new Symbol(sym.llaveiz,yycolumn,yyline,yytext());}
+"}" {System.out.println("Simbolo" + yytext());return new Symbol(sym.llaveder,yycolumn,yyline,yytext());}
+"~" {System.out.println("Simbolo" + yytext());return new Symbol(sym.sconj,yycolumn,yyline,yytext());}
+"." {System.out.println("Simbolo" + yytext());return new Symbol(sym.conc,yycolumn,yyline,yytext());}
+"|" {System.out.println("Simbolo" + yytext());return new Symbol(sym.or,yycolumn,yyline,yytext());}
+"?" {System.out.println("Simbolo" + yytext());return new Symbol(sym.inter,yycolumn,yyline,yytext());}
+"\\”" {System.out.println("Simbolo especial" + yytext());return new Symbol(sym.comilla,yycolumn,yyline,yytext());}
+"\\'" {System.out.println("Simbolo especial" + yytext());return new Symbol(sym.comilla2,yycolumn,yyline,yytext());}
+"\\n" {System.out.println("Simbolo especial" + yytext());return new Symbol(sym.salto,yycolumn,yyline,yytext());}
+"conj" {System.out.println("Palabra reservada" + yytext());return new Symbol(sym.conj,yycolumn,yyline,yytext());}
+"tld" {System.out.println("Palabra reservada" + yytext());return new Symbol(sym.tld,yycolumn,yyline,yytext());}
 
 \n {yycolumn=1;}
 {blancos} {/*Se ignoran*/}
 //45+98
 //{nombre} {System.out.println(yytext());return new Symbol(sym.nombre,yycolumn,yyline,yytext());}
-{entero} {System.out.println(yytext());return new Symbol(sym.entero,yycolumn,yyline,yytext());} // almacenando un valor entero en la tabla de simbolos
-{decimal} {System.out.println(yytext());return new Symbol(sym.decimal,yycolumn,yyline,yytext());}
-{letra} {System.out.println(yytext());return new Symbol(sym.letra,yycolumn,yyline,yytext());}
-{id} {System.out.println(yytext());return new Symbol(sym.id,yycolumn,yyline,yytext());}
-{simbolo} {System.out.println(yytext());return new Symbol(sym.simbolo,yycolumn,yyline,yytext());}
-{cadena} {System.out.println(yytext());return new Symbol(sym.cadena,yycolumn,yyline,yytext());}
+{entero} {System.out.println("Entero" + yytext());return new Symbol(sym.entero,yycolumn,yyline,yytext());} // almacenando un valor entero en la tabla de simbolos
+{decimal} {System.out.println("Decimal" + yytext());return new Symbol(sym.decimal,yycolumn,yyline,yytext());}
+{letra} {System.out.println("Letra" + yytext());return new Symbol(sym.letra,yycolumn,yyline,yytext());}
+{id} {System.out.println("Id" + yytext());return new Symbol(sym.id,yycolumn,yyline,yytext());}
+{simbolo} {System.out.println("Otros simbolos" + yytext());return new Symbol(sym.simbolo,yycolumn,yyline,yytext());}
+{cadena} {System.out.println("Cadena" + yytext());return new Symbol(sym.cadena,yycolumn,yyline,yytext());}
 "\"" {yybegin(STRNG);}
 "\”" {yybegin(STRNG2);}
 "\'" {yybegin(STRNG3);}

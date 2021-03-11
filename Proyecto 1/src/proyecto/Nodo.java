@@ -21,7 +21,7 @@ public class Nodo {
     public String last;
     public String follow;
         
-    public int contador = 0;
+    //public int contador = 0;
 
     public Nodo(Nodo hizq, Nodo hder, String valor, int id, String i, String an, String first, String last, String follow) {
         this.hizq = hizq;
