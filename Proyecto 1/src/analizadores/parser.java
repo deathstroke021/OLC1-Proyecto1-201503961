@@ -247,7 +247,7 @@ public class parser extends java_cup.runtime.lr_parser {
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot");
+            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\Reportes\\ARBOLES_201503961\\" + nombre + ".dot");
             pw = new PrintWriter(fichero);
             pw.println("digraph G{");
             pw.println("rankdir=UD");
@@ -279,9 +279,9 @@ public class parser extends java_cup.runtime.lr_parser {
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot";
+            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\Reportes\\ARBOLES_201503961\\" + nombre + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\" +nombre+ ".jpg";
+            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\Reportes\\ARBOLES_201503961\\" +nombre+ ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
@@ -314,7 +314,7 @@ public class parser extends java_cup.runtime.lr_parser {
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot");
+            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\Reportes\\SIGUIENTES_201503961\\" + nombre + ".dot");
             pw = new PrintWriter(fichero);
             pw.println("digraph H{");
             pw.println("parent [");
@@ -356,9 +356,9 @@ public class parser extends java_cup.runtime.lr_parser {
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot";
+            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\Reportes\\SIGUIENTES_201503961\\" + nombre + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\" +nombre+ ".jpg";
+            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\Reportes\\SIGUIENTES_201503961\\" +nombre+ ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
@@ -397,7 +397,7 @@ public static void graficarTransiciones(String nombre){
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot");
+            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\Reportes\\TRANCISIONES_201503961\\" + nombre + ".dot");
             pw = new PrintWriter(fichero);
             /*for(int i = 0;i < transiciones.size();i++){
                 pw.println(transiciones.get(i));
@@ -485,9 +485,9 @@ public static void graficarTransiciones(String nombre){
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot";
+            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\Reportes\\TRANCISIONES_201503961\\" + nombre + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\" +nombre+ ".jpg";
+            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\Reportes\\TRANCISIONES_201503961\\" +nombre+ ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
@@ -515,7 +515,7 @@ public static void graficarTransiciones(String nombre){
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot");
+            fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\Reportes\\AFD_201503961\\" + nombre + ".dot");
             pw = new PrintWriter(fichero);
             pw.println("digraph automata_finito {");
             pw.println("rankdir=LR;");
@@ -557,9 +557,9 @@ public static void graficarTransiciones(String nombre){
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\" + nombre + ".dot";
+            String fileInputPath = "C:\\Users\\Fernando Armira\\Documents\\Reportes\\AFD_201503961\\" + nombre + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\" +nombre+ ".jpg";
+            String fileOutputPath = "C:\\Users\\Fernando Armira\\Documents\\Reportes\\AFD_201503961\\" +nombre+ ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";

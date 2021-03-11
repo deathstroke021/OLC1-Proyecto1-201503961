@@ -30,6 +30,7 @@ public class Interfaz extends javax.swing.JFrame {
      */
     public static String list_of_names="";
     public static ArrayList<Errores> listaErrores = new ArrayList<Errores>();
+    public static String nombrearchivo = "";
     
     public Interfaz() {
         initComponents();
@@ -209,6 +210,7 @@ public class Interfaz extends javax.swing.JFrame {
                 }
                 
                 jTextArea3.append("Archivo abierto: " + chooser.getSelectedFile().getPath() + "\n");
+                nombrearchivo = chooser.getSelectedFile().getName();
 
             }catch(IOException e) {
                 e.printStackTrace();
@@ -314,18 +316,19 @@ public class Interfaz extends javax.swing.JFrame {
         /*for(int i =0; i<listaErrores.size();i++){
             System.out.println("i: "+i+" Tipo: "+listaErrores.get(i).tipoError+" valorError:"+listaErrores.get(i).valorError+" fila:"+listaErrores.get(i).fila+" Columna:"+listaErrores.get(i).columna);
         }*/
-        ReporteErrores();
+        
+        ReporteErrores(nombrearchivo);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
     
-    public void ReporteErrores(){
+    public void ReporteErrores(String nombre){
         FileWriter fichero = null;
                 PrintWriter pw = null;
                 try {
-                    fichero = new FileWriter("C:\\\\Users\\\\Fernando Armira\\\\Documents\\Reporte Errores.html");
+                    fichero = new FileWriter("C:\\Users\\Fernando Armira\\Documents\\Reportes\\ERRORES_201503961\\" + nombre+ ".html");
                     pw = new PrintWriter(fichero);
                     //comenzamos a escribir el html
                     pw.println("<html>");
@@ -364,7 +367,7 @@ public class Interfaz extends javax.swing.JFrame {
                     }
                 }
                 try {
-            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + "Reportes\\"+"Reporte ErroresL.html");
+            //Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + "Reportes\\"+"Reporte ErroresL.html");
             //System.out.println("Final");
         } catch (Exception e) {
             e.printStackTrace();
